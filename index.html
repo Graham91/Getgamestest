@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <style>
+
+    </style>
+</head>
+
+<body>
+    <iframe src=""></iframe>
+    <h3>Video Title</h3>
+    <p class="description">Video Description
+    <p>
+
+        <script>
+
+            $(document).ready(function () {
+                const balldontlieteamnumber = {
+                    AtlantaHawks: 1,
+                    BostonCeltics: 2,
+                    BrooklynNets: 3,
+                    CharlotteHornets: 4,
+                    ChicagoBulls: 5,
+                    ClevelandCavaliers: 6,
+                    DallasMavericks: 7,
+                    DenverNuggets: 8,
+                    DetroitPistons: 9,
+                    GoldenStateWarriors: 10,
+                    HoustonRockets: 11,
+                    IndianaPacers: 12,
+                    LAClippers: 13,
+                    LALakers: 14,
+                    MemphisGrizzlies: 15,
+                    MiamiHeat: 16,
+                    MilwaukeeBucks: 17,
+                    MinnesotaTimberwolves: 18,
+                    NewOrleansPelicans: 19,
+                    NewYorkKnicks: 20,
+                    OklahomaCityThunder: 21,
+                    OrlandoMagic: 22,
+                    PhiladelphiaSixers: 23,
+                    PhoenixSuns: 24,
+                    PortlandTrailBlazers: 25,
+                    SacramentoKings: 26,
+                    SanAntonioSpurs: 27,
+                    TorontoRaptors: 28,
+                    UtahJazz: 29,
+                    WashingtonWizards: 30
+                }
+                var queryTeamURL = "https://www.balldontlie.io/api/v1/teams/";
+                $.ajax({
+                    url: queryTeamURL,
+                    method: "GET",
+                }).then(function (response) {
+                    console.log(response)
+                });
+                let selectedTeamScores = [];
+                var queryGameURL =
+                    "https://www.balldontlie.io/api/v1/games?start_date=2020-03-03&team_ids[]=" + 19
+                    ;
+                $.ajax({
+                    url: queryGameURL,
+                    method: "GET",
+                }).then(function (res) {
+                    console.log(res);
+                    let gameobject = [];
+                    let gamearray = []
+                    let homeTeamScore,
+                        homeTeamName,
+                        homeTeam,
+                        visitingTeamScore,
+                        visitingTeamName;
+                    res.data.forEach(element => {
+                        let visitingTeamScore = element.visitor_team_score;
+                        if (visitingTeamScore === 0) { }
+                        else {
+
+                            gamearray.push(element.id);
+                        }
+                        let homeTeamName = element.home_team.full_name;
+                        let visitingTeamName = element.visitor_team.full_name;
+                        let homeTeamScore = element.home_team_score;
+                        let date = element.date.substring(0, 10);
+                        console.log(date);
+                        let gameyoutubesearch =
+                            "Home team: " +
+                            homeTeamName +
+                            " " +
+                            homeTeamScore +
+                            " vs " +
+                            "Visiting team: " +
+                            visitingTeamName +
+                            " " +
+                            visitingTeamScore;
+                        let gameElement = {
+                            nameid: element.id,
+                            gameyoutubesearch: gameyoutubesearch
+                        }
+
+                        gameobject.push(gameElement);
+
+                    });
+                    console.log(gameobject);
+                    console.log(gamearray);
+                    gamearray.sort(function (a, b) { return b - a });
+                    console.log(gamearray);
+                    let newgameobject = [];
+                    gamearray.forEach(element => {
+
+                        var result = gameobject.filter(obj => {
+                            return obj.nameid === element;
+
+                        });
+                        console.log(result[0])
+                        newgameobject.push(result[0].gameyoutubesearch);
+                    });
+                    console.log(newgameobject);
+                    for (let index = 0; index < 1; index++) {
+                        console.log(newgameobject[index]);
+                        // $.ajax({
+                        //     type: "GET",
+                        //     url: "https://www.googleapis.com/youtube/v3/search",
+                        //     data: {
+                        //         key: "AIzaSyCOiobg1h3qe_5MFlLRS4W0JtcZ4gmkZB0",
+                        //         q: newgameobject[index],
+                        //         part: "snippet",
+                        //         maxResults: 1,
+                        //         type: "video",
+                        //         videoEmbeddable: true,
+                        //     },
+                        //     success: function (data) {
+                        //         console.log(data);
+                        //         $("iframe").attr(
+                        //             "src",
+                        //             "https://www.youtube.com/embed/" + data.items[0].id.videoId
+                        //         );
+                        //         $("h3").text(data.items[0].snippet.title);
+                        //         $(".description").text(data.items[0].snippet.description);
+                        //         // embedVideo(data)
+                        //     },
+                        //     error: function (response) {
+                        //         console.log("Request Failed");
+                        //     },
+                        // });
+                    }
+                });
+            });
+        </script>
+</body>
+
+</html>
